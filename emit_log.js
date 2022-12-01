@@ -6,14 +6,8 @@ const amqp = require("amqplib");
   const queue = "task_queue";
   const msg = process.argv.slice(2).join(" ");
 
-  ch.assertQueue(queue, {
-    durable: false,
-  });
-
-  ch.sendToQueue(queue, Buffer.from(msg), {
-    persistent: true,
-  });
-  console.log("sent", msg);
+  ch.assertExchange("logs", "fanout", { durable: false });
+  ch.publish("logs", "", Buffer.from(msg));
 
   setTimeout(function () {
     connection.close();
