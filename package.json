@@ -1,0 +1,22 @@
+{
+  "name": "bicyclerenter",
+  "version": "1.0.0",
+  "description": "simple bicycle renter app using rabbitmq",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saeedalimardani1/BicycleRenter.git"
+  },
+  "author": "saeed alimardani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saeedalimardani1/BicycleRenter/issues"
+  },
+  "homepage": "https://github.com/saeedalimardani1/BicycleRenter#readme",
+  "dependencies": {
+    "amqplib": "^0.10.3"
+  }
+}
