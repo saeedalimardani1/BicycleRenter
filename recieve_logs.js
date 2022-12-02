@@ -1,12 +1,14 @@
 const amqp = require("amqplib");
 
 (async () => {
+  const args = process.argv.slice(2);
+
   const connection = await amqp.connect("amqp://localhost:5672");
   const ch = await connection.createChannel();
 
-  const exchange = "logs";
+  const exchange = "direct_logs";
 
-  ch.assertExchange(exchange, "fanout", {
+  ch.assertExchange(exchange, "direct", {
     durable: false,
   });
 
@@ -14,16 +16,20 @@ const amqp = require("amqplib");
     exclusive: true,
   });
 
-  console.log("waiting for messeges: ", q.queue);
+  console.log(" [*] Waiting for logs. To exit press CTRL+C");
 
-  ch.bindQueue(q.queue, exchange, "");
+  args.forEach(function (severity) {
+    ch.bindQueue(q.queue, exchange, severity);
+  });
 
   ch.consume(
     q.queue,
     (msg) => {
-      if (msg.content) {
-        console.log("recieved: ", msg.content.toString());
-      }
+      console.log(
+        " [x] %s: '%s'",
+        msg.fields.routingKey,
+        msg.content.toString()
+      );
     },
     {
       noAck: true,
