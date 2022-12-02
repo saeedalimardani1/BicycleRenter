@@ -6,9 +6,9 @@ const amqp = require("amqplib");
   const connection = await amqp.connect("amqp://localhost:5672");
   const ch = await connection.createChannel();
 
-  const exchange = "direct_logs";
+  const exchange = "topic_logs";
 
-  ch.assertExchange(exchange, "direct", {
+  ch.assertExchange(exchange, "topic", {
     durable: false,
   });
 
@@ -18,8 +18,8 @@ const amqp = require("amqplib");
 
   console.log(" [*] Waiting for logs. To exit press CTRL+C");
 
-  args.forEach(function (severity) {
-    ch.bindQueue(q.queue, exchange, severity);
+  args.forEach(function (key) {
+    ch.bindQueue(q.queue, exchange, key);
   });
 
   ch.consume(
